@@ -28,7 +28,7 @@ class ExpireCommandServiceProvider extends ServiceProvider
             ]);
 
             $this->publishes([
-                __DIR__.'/../lang' => $this->app->langPath('vendor/expire'),
+                __DIR__.'/../lang' => $this->app->langPath(),
             ]);
         }
 
