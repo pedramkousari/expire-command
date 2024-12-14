@@ -8,20 +8,7 @@ The **Expire Command** package provides a console command for managing expiratio
 
 To install the package, follow these steps:
 
-1. **Add the package to your Laravel project:**
-
-   In your Laravel project's `composer.json`, add the following repository:
-
-   ```json
-   "repositories": [
-       {
-           "type": "path",
-           "url": "packages/pedramkousari/expire-command"
-       }
-   ],
-   ```
-
-2. **Require the package:**
+1. **Require the package:**
 
    Run the following command in your terminal:
 
@@ -29,7 +16,7 @@ To install the package, follow these steps:
    composer require pedramkousari/expire-command
    ```
 
-3. **Register the Service Provider:**
+2. **Register the Service Provider:**
 
    In your `config/app.php` file, add the service provider to the `providers` array:
 

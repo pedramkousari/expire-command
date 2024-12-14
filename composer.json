@@ -8,35 +8,40 @@
         "command"
     ],
     "type": "library",
-    "require": {
-        "php": "^8.2",
-        "laravel/framework": "^11.9",
-        "laravel/prompts": "^0.3.2"
-    },
-    "autoload": {
-        "psr-4": {
-            "Pedramkousari\\ExpireCommand\\": "src/"
-        }
-    },
-    "minimum-stability": "stable",
-    "prefer-stable": true,
     "license": "MIT",
+    "homepage": "https://github.com/pedramkousari/expire-command",
+    "support": {
+        "issues": "https://github.com/pedramkousari/expire-command/issues",
+        "source": "https://github.com/pedramkousari/expire-command"
+    },
     "authors": [
         {
             "name": "Pedram Kousari",
             "email": "pedramkousari@gmail.com"
         }
     ],
-    "homepage": "https://github.com/pedramkousari/expire-command",
-    "support": {
-        "issues": "https://github.com/pedramkousari/expire-command/issues",
-        "source": "https://github.com/pedramkousari/expire-command"
+    "require": {
+        "php": "^8.1",
+        "illuminate/support": "^8.0|^9.0|^10.0",
+        "laravel/prompts": "^0.3.2"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Pedramkousari\\ExpireCommand\\": "src/"
+        }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Pedramkousari\\ExpireCommand\\Providers\\ExpireCommandServiceProvider::class"
+                "Pedramkousari\\ExpireCommand\\Providers\\ExpireCommandServiceProvider"
             ]
         }
-    }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }
