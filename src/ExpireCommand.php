@@ -13,12 +13,6 @@ use Illuminate\Support\Facades\Storage;
 
 class ExpireCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'z-abshar:expire {--check}';
 
     /**
      * The console command description.
@@ -35,6 +29,12 @@ class ExpireCommand extends Command
      */
     protected $file = 'expire.txt';
 
+    public function __construct()
+    {
+        $this->signature = config('expire.signature'). ' {--check}';
+        parent::__construct();
+    }
+
     /**
      * Execute the console command.
      */
@@ -50,7 +50,7 @@ class ExpireCommand extends Command
 
 
         $role = select(
-            label: 'What do you want to do?',
+            label: __('expire::expire.what_do_you_want_to_do'),
             options: ['Set Expire', 'Check Expire', 'Up Site']
         );
 
@@ -66,11 +66,11 @@ class ExpireCommand extends Command
     protected function setExpire()
     {
         $expire = text(
-            label: 'Enter the expire date',
+            label: __('expire::expire.enter_the_expire_date'),
             placeholder: now()->addYear()->format('Y-m-d'),
             required: true,
             validate: fn ($value) => match (true) {
-                Validator::make(['expire' => $value], ['expire' => 'date|after:now'])->fails() => 'The date is not valid or must be greater than today',
+                Validator::make(['expire' => $value], ['expire' => 'date|after:now'])->fails() => __('expire::expire.the_date_is_not_valid_or_must_be_greater_than_today'),
                 default => null,
             },
         );
@@ -83,20 +83,20 @@ class ExpireCommand extends Command
     protected function storeExpire(Carbon $expire)
     {
         Storage::put($this->file, $expire);
-        $this->info('Store Expire for ' . $expire->format('Y-m-d'));
+        $this->info(__('expire::expire.stored_expire_date', ['date' => $expire->format('Y-m-d')]));
     }
 
     protected function checkExpire()
     {
         if (!Storage::exists($this->file)) {
-            $this->info('Expire date is not set');
+            $this->info(__('expire::expire.expire_date_is_not_set'));
             return;
         }
 
         $expire = Storage::get($this->file);
 
         if (empty($expire)) {
-            $this->info('Expire date is not set');
+            $this->info(__('expire::expire.expire_date_is_not_set'));
             return;
         }
 
@@ -104,9 +104,9 @@ class ExpireCommand extends Command
 
         if (now()->greaterThan($expire)) {
             Artisan::call('down', [], $this->output);
-            $this->error('Expire date is expired');
+            $this->error(__('expire::expire.expire_date_is_expired'));
         } else {
-            $this->info('Expire date is valid ' . $expire->diffForHumans(now(), true, true, 2));
+            $this->info(__('expire::expire.expire_date_is_valid', ['date' => $expire->diffForHumans(now(), true, true, 2)]));
         }
     }
 
@@ -117,6 +117,6 @@ class ExpireCommand extends Command
         }
 
         Artisan::call('up', [], $this->output);
-        $this->info('Site is up');
+        $this->info(__('expire::expire.site_is_up'));
     }
 }
