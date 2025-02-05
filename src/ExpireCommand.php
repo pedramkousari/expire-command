@@ -19,7 +19,7 @@ class ExpireCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Set Or Check Expire Date';
 
 
     /**
@@ -31,7 +31,8 @@ class ExpireCommand extends Command
 
     public function __construct()
     {
-        $this->signature = config('expire.signature'). ' {--check}';
+        $example = now()->addYear()->format('Y-m-d');
+        $this->signature = config('expire.signature'). " {--check} {--set= : Set Expire Date 'E.g: $example'}";
         parent::__construct();
     }
 
@@ -41,10 +42,15 @@ class ExpireCommand extends Command
     public function handle()
     {
         $check = $this->option('check');
-
-
         if ($check) {
             $this->checkExpire();
+            return;
+        }
+
+        $date = $this->option('set');
+
+        if ($date) {
+            $this->setExpire($date);
             return;
         }
 
@@ -63,17 +69,21 @@ class ExpireCommand extends Command
         }
     }
 
-    protected function setExpire()
+    protected function setExpire($date = null)
     {
-        $expire = text(
-            label: __('expire::expire.enter_the_expire_date'),
-            placeholder: now()->addYear()->format('Y-m-d'),
-            required: true,
-            validate: fn ($value) => match (true) {
-                Validator::make(['expire' => $value], ['expire' => 'date|after:now'])->fails() => __('expire::expire.the_date_is_not_valid_or_must_be_greater_than_today'),
-                default => null,
-            },
-        );
+        if($date){
+            $expire = $date;
+        } else {
+            $expire = text(
+                label: __('expire::expire.enter_the_expire_date'),
+                placeholder: now()->addYear()->format('Y-m-d'),
+                required: true,
+                validate: fn ($value) => match (true) {
+                    Validator::make(['expire' => $value], ['expire' => 'date|after:now'])->fails() => __('expire::expire.the_date_is_not_valid_or_must_be_greater_than_today'),
+                    default => null,
+                },
+            );
+        }
 
         $expire = Carbon::parse($expire);
 
